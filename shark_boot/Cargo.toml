@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies.uefi]
 version = "0.33.0"
-features = ["panic_handler"]
+features = ["panic_handler", "global_allocator", "alloc"]
