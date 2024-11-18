@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["shark_boot", "shark_runner"]
+members = ["shark_boot", "shark_kernel", "shark_runner"]
 
 [profile.release]
 codegen-units = 1
