@@ -1,27 +1,27 @@
 #![no_std]
 #![no_main]
 
-use core::slice::from_raw_parts_mut;
-use uefi::boot::{exit_boot_services, image_handle, open_protocol_exclusive, MemoryType};
-use uefi::proto::console::gop::GraphicsOutput;
-use uefi::{entry, Status};
-
-#[entry]
+#[uefi::entry]
 #[cfg(target_os = "uefi")]
-fn efi_main() -> Status {
-    let mut gop = open_protocol_exclusive::<GraphicsOutput>(image_handle()).unwrap();
-    let mut framebuffer = gop.frame_buffer();
-    let size = framebuffer.size();
-    let ptr = framebuffer.as_mut_ptr();
-    let framebuffer = unsafe { from_raw_parts_mut(ptr, size) };
+fn efi_main() -> uefi::Status {
+    use uefi::boot::{exit_boot_services, MemoryType};
+    use uefi::mem::memory_map::{MemoryMap, MemoryMapMut};
 
     let _mmap = unsafe { exit_boot_services(MemoryType::CONVENTIONAL) };
 
-    kernel_main(framebuffer);
+    kernel_main();
 
     Status::SUCCESS
 }
 
-fn kernel_main(fb: &mut [u8]) {
+fn kernel_main() {
     loop {}
 }
+
+struct MemoryMapInfo {
+    size: usize,
+    descriptor_size: usize,
+    descriptor_version: usize,
+}
+
+struct KernelArgs {}
